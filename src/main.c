@@ -95,11 +95,12 @@ int append_contents(char* inputfile, char* outputfile) {
     return 0;
 }
 
-void display_help() {
+int display_help() {
     printf("Usage:\n");
     printf("Display contents: dog 'filename'\n");
     printf("Write contents to new file: dog 'inputfile' --write 'outputfile'\n");
     printf("Append contents to new file: dog 'inputfile' --append 'outputfile'\n");
+    return 0;
 }
 
 
@@ -110,7 +111,12 @@ int main(int argc, char* argv[]) {
         }
     } // defaults to echo loop, otherwise:
     if (argc == 2 ) {
-        return print_contents(argv[1]);
+        if ((strcmp(argv[1], "--help") == 0)) {
+            return display_help();
+        }
+        if (print_contents(argv[1]) == 1) {
+            printf("dog --help for help\n");
+        }
     } else if (argc == 4) {
         if (strcmp(argv[2], "--write") == 0) {
             return write_contents(argv[1], argv[3]);
