@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
             return display_help();
         }
         if (print_contents(argv[1]) == 1) {
-            printf("dog --help for help\n");
+            printf("dog --help for help\n"); // prompt help if file not found, for possible mistype of --help
         }
     } else if (argc == 4) {
         if (strcmp(argv[2], "--write") == 0) {
