@@ -20,6 +20,7 @@ void echo() {
         exit(0);
     }
     free(line); // must free
+    memset(line, 0, sizeof(line));
 }
 
 int print_contents(const char* inputfile) {
