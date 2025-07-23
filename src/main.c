@@ -6,7 +6,21 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+void echo() {
+    char* line = NULL;
+    size_t len = 0;
+    ssize_t read = getline(&line, &len, stdin); // read full line, (dynamic realloc)
+
+    if (read != -1) {
+        printf("%s", line);
+    } else {
+        exit(0);
+    }
+    free(line); // must free
+}
 
 int print_contents(const char* inputfile) {
     FILE* file = fopen(inputfile, "r");
@@ -19,7 +33,7 @@ int print_contents(const char* inputfile) {
     }
 
     /* Read each character from file and print to console immediately */
-    int ci; // use int not char - match return type of fgetc
+    int ci; // use int not char (match return type of fgetc)
     while ((ci = fgetc(file)) != EOF) {
         const char c = (char)ci; // cast to char AFTER eof found
         putchar(c);
@@ -28,6 +42,7 @@ int print_contents(const char* inputfile) {
     return 0;
 }
 
+/* write cat result to external file */
 int write_contents(char* inputfile, char* outputfile) {
     FILE* source = fopen(inputfile, "r");
     FILE* destination = fopen(outputfile, "w");
@@ -53,6 +68,7 @@ int write_contents(char* inputfile, char* outputfile) {
     return 0;
 }
 
+/* append cat result to external file */
 int append_contents(char* inputfile, char* outputfile) {
     FILE* source = fopen(inputfile, "r");
     FILE* destination = fopen(outputfile, "a");
@@ -88,9 +104,10 @@ void display_help() {
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        display_help();
-        return 0;
-    }
+        while (1) {
+            echo();
+        }
+    } // defaults to echo loop, otherwise:
     if (argc == 2 ) {
         return print_contents(argv[1]);
     } else if (argc == 4) {
