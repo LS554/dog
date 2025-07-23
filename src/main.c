@@ -52,9 +52,10 @@ int write_contents(char* inputfile, char* outputfile) {
         perror(errormsg);
         return 1;
     }
+
     FILE* check = fopen(outputfile, "r");
     if (check) {
-        printf("File '%s' already exists, overwrite it? (Y/n)", outputfile);
+        printf("File '%s' already exists, overwrite it? (Y/n): ", outputfile);
         const char option = getchar();
         switch (option) {
             case 'y': break;
