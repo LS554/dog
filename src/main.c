@@ -46,13 +46,30 @@ int print_contents(const char* inputfile) {
 /* write cat result to external file */
 int write_contents(char* inputfile, char* outputfile) {
     FILE* source = fopen(inputfile, "r");
-    FILE* destination = fopen(outputfile, "w");
     if (!source) {
         char errormsg[256];
         snprintf(errormsg, sizeof(errormsg), "%s%s%s", "Could not open file '", inputfile, "'");
         perror(errormsg);
         return 1;
-    } if (!outputfile) {
+    }
+    FILE* check = fopen(outputfile, "r");
+    if (check) {
+        printf("File '%s' already exists, overwrite it? (Y/n)", outputfile);
+        const char option = getchar();
+        switch (option) {
+            case 'y': break;
+            case 'Y': break;
+            case '\n': break;
+            case 'n': return 1;
+            case 'N': return 1;
+            default:
+                printf("Unexpected option, quitting");
+                return 1;
+        }
+    }
+
+    FILE* destination = fopen(outputfile, "w");
+    if (!destination) {
         char errormsg[256];
         snprintf(errormsg, sizeof(errormsg), "%s%s%s", "Could not open file '", outputfile, "'");
         perror(errormsg);
@@ -72,13 +89,23 @@ int write_contents(char* inputfile, char* outputfile) {
 /* append cat result to external file */
 int append_contents(char* inputfile, char* outputfile) {
     FILE* source = fopen(inputfile, "r");
-    FILE* destination = fopen(outputfile, "a");
     if (!source) {
         char errormsg[256];
         snprintf(errormsg, sizeof(errormsg), "%s%s%s", "Could not open file '", inputfile, "'");
         perror(errormsg);
         return 1;
-    } if (!destination) {
+    }
+    // Check if output file exists
+    FILE* check = fopen(outputfile, "r");
+    if (!check) {
+        char errormsg[256];
+        snprintf(errormsg, sizeof(errormsg), "%s%s%s", "Could not append to file: '", outputfile, "'");
+        perror(errormsg);
+        fclose(source);
+        return 1;
+    }
+    FILE* destination = fopen(outputfile, "a");
+    if (!destination) {
         char errormsg[256];
         snprintf(errormsg, sizeof(errormsg), "%s%s%s", "Could not open file '", outputfile, "'");
         perror(errormsg);
