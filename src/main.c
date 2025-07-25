@@ -84,6 +84,7 @@ int write_contents(char* inputfile, char* outputfile) {
     }
     fclose(source);
     fclose(destination);
+    fclose(check);
     return 0;
 }
 
@@ -120,6 +121,7 @@ int append_contents(char* inputfile, char* outputfile) {
     }
     fclose(source);
     fclose(destination);
+    fclose(check);
     return 0;
 }
 
